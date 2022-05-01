@@ -1,31 +1,55 @@
-header {
-  background-color: #9c27b0;
-  text-align: center;
-  padding: 20px;
+.site-layout-content {
+    position: relative;
+    min-height: 100vh;
+    padding: 24px 24px 24px;
+    background: #fff;
 }
-body {
-  background-color: ghostwhite;
+#components-layout-demo-top .logo {
+    float: left;
+    width: 120px;
+    height: 31px;
+    margin: 16px 24px 16px 0;
+    background: rgba(255, 255, 255, 0.3);
 }
-.App {
-  text-align: center;
-  Button : center ;
-}
-
-
-
-
-
-
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.ant-row-rtl #components-layout-demo-top .logo {
+    float: right;
+    margin: 16px 0 16px 24px;
 }
 
+.site-page-header {
+    border: 1px solid rgb(235, 237, 240);
+}
+
+.site-page-footer {
+    position: absolute;
+    text-align: center;
+    bottom: 0;
+    width: 100%;
+}
+
+.site-title {
+    color: #f2f2f2 !important;
+    margin: 0 5px 24px;
+    padding: 10px;
+    font-family: 'Libre Baskerville', serif;
+    font-size: 2em;
+}
+.log {
+    font-family: "Ubuntu Mono";
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .App-logo {
+        animation: App-logo-spin infinite 20s linear;
+    }
+}
+
+@keyframes App-logo-spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
 

@@ -1,0 +1,7 @@
+{
+  "remotes": ["node1", "node2","node3"],
+  "jobs": ["hostname"],
+  "run": {
+    "data": "Job run successfully"
+  }
+}
