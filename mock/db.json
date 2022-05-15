@@ -3,5 +3,25 @@
   "jobs": ["hostname"],
   "run": {
     "data": "Job run successfully"
-  }
+  },
+  "getHistory": [
+      {
+        "job": "hostname.sh",
+        "log": "node1",
+        "hostname": "node1",
+        "timestamp": 1652650210288
+      },
+      {
+        "job": "hostname.sh",
+        "log": "node2",
+        "hostname": "node2",
+        "timestamp": 1652650310288
+      },
+      {
+        "job": "hostname.sh",
+        "log": "node3",
+        "hostname": "node3",
+        "timestamp": 1652650280288
+      }
+    ]
 }

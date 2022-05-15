@@ -1,11 +1,9 @@
 import 'antd/dist/antd.min.css'
 import './App.css';
-import logo from './logo.svg';
-import call from "./services/jobService";
+import {call} from "./services/jobService";
 import {useState} from "react";
-import {Button, Form, Layout, PageHeader, Input, Card} from 'antd'
-import {Content, Footer, Header} from "antd/lib/layout/layout";
-import Title from "antd/lib/typography/Title";
+import {Button, Card, Form, Input} from 'antd'
+import {Content} from "antd/lib/layout/layout";
 import "@fontsource/ubuntu-mono";
 
 export default function App() {
@@ -24,16 +22,7 @@ export default function App() {
     }
 
     return (
-        <div>
-            <Header>
-                <Title className="site-title"  >
-                    <img src={logo} className="App-logo" alt="logo" width="55" height="55"/>
-                    Orchestrator
-                </Title>
-            </Header>
 
-            <Layout style={{ padding: '0 24px 24px' }}>
-                <PageHeader className="site-page-header" title="Run Job"/>
                 <Content className="site-layout-content">
                     <Form labelCol={{span: 8}} wrapperCol={{span: 10}}  form={form} onFinish={submit}>
                         <Form.Item
@@ -66,9 +55,6 @@ export default function App() {
                             </p>
                     </Card>
                 </Content>
-            </Layout>
-            <Footer className="site-page-footer">©2022 Created by Naddari</Footer>
-        </div>
     );
 };
 
