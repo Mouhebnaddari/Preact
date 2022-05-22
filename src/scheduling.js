@@ -1,68 +1,89 @@
+import React, {useState} from 'react'
+import Cron from 'react-js-cron'
+import {Button, Form, Input, notification} from "antd";
+import {Content} from "antd/lib/layout/layout";
+import {schedule} from './services/jobService'
 import 'antd/dist/antd.min.css'
 import './App.css';
-import {Content} from "antd/lib/layout/layout";
 import "@fontsource/ubuntu-mono";
-import {Button, Form, Input} from "antd";
-import {useState} from "react";
-import React  from 'react'
-import Cron  from 'react-cron-generator'
-import 'react-cron-generator/dist/cron-builder.css'
-
-
-
-
 
 
 export default function Scheduling() {
-
     const [job, setJob] = useState("")
     const [remote, setRemote] = useState("")
     const [isLoading, setLoading] = useState(false)
-    const [value,setValue] = useState('* * * * * * *')
+    const inputRef = React.useRef(null)
+    const defaultValue = "* * * * *"
+    const [cronExpression, setCronExpression] = React.useState(defaultValue)
+    const [error, onError] = React.useState()
+    const [form] = Form.useForm()
 
-    const [form] = Form.useForm();
+    const customSetCronExpression = React.useCallback(newValue => {
+        setCronExpression(newValue)
+        inputRef.current?.setValue(newValue)
+    }, [inputRef])
+
+
     const submit = async () => {
         setLoading(true);
-        setLoading(false);
-        form.resetFields()
+        try {
+            await schedule(job, remote, cronExpression)
+            notification.success({
+                message: 'Job scheduled successfully'
+            });
+            form.resetFields()
+        } catch (e) {
+            console.error(e)
+            notification.error({
+                message: 'Scheduling job error',
+                description: e
+            });
+        } finally {
+            setLoading(false);
+        }
     }
 
     return (
-<div>
-                <Content className="site-layout-content">
-                    <Form labelCol={{span: 8}} wrapperCol={{span: 10}}  form={form} onFinish={submit}>
-                        <Form.Item
-                            label="Job"
-                            name="Job"
-                            rules={[{required: true, message: 'Please input the job!',}]}
-                            value={job}
-                            onChange={(e => setJob(e.target.value))}
-                        >
-                            <Input/>
-                        </Form.Item>
-                        <Form.Item
-                            label="Remote"
-                            name="Remote"
-                            rules={[{required: true, message: 'Please input your Remote!'}]}
-                            value={remote}
-                            onChange={(e => setRemote(e.target.value))}
-                        >
-                            <Input/>
-                        </Form.Item>
-                        <Form.Item wrapperCol={{offset: 12, span: 20}}>
-                            <Button type="primary" loading={isLoading} htmlType='submit'>
-                                Submit
-                            </Button>
-                        </Form.Item>
-                    </Form>
-                    <Cron
-                        onChange={(e)=> {setValue({value:e});}}
-                        value={value}
-                        showResultText={true}
-                        showResultCron={true}
-                    />
-                </Content>
-</div>
+        <div>
+            <Content className="site-layout-content">
+                <Form labelCol={{span: 4}} wrapperCol={{span: 16}} form={form} onFinish={submit}>
+                    <Form.Item
+                        label="Job"
+                        name="Job"
+                        rules={[{required: true, message: 'Please input the job!',}]}
+                        value={job}
+                        onChange={(e => setJob(e.target.value))}
+                    >
+                        <Input/>
+                    </Form.Item>
+                    <Form.Item
+                        label="Remote"
+                        name="Remote"
+                        rules={[{required: true, message: 'Please input your Remote!'}]}
+                        value={remote}
+                        onChange={(e => setRemote(e.target.value))}
+                    >
+                        <Input/>
+                    </Form.Item>
+                    <Form.Item style={{paddingLeft: '20%'}}
+                               name="cronExpression"
+                               rules={[{
+                                   required: true,
+                                   message: 'Please select a cron!',
+                                   validator: () => cronExpression === defaultValue ? Promise.reject() : Promise.resolve()
+                               }]}
+                    >
+                        <Cron value={cronExpression} setValue={customSetCronExpression} onError={onError}/>
+                    </Form.Item>
+
+                    <Form.Item wrapperCol={{offset: 10, span: 20}}>
+                        <Button type="primary" loading={isLoading} htmlType='submit'>
+                            Submit
+                        </Button>
+                    </Form.Item>
+                </Form>
+            </Content>
+        </div>
 
     );
 };
