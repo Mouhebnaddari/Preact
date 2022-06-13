@@ -1,4 +1,5 @@
-import {useState} from "react";
+import {useState}  from "react";
+import React from "react";
 import {Button, Card, Form, Input} from 'antd'
 import {Content} from "antd/lib/layout/layout";
 import {call} from "./services/jobService";
@@ -52,6 +53,7 @@ export default function App() {
             <Card title='Output'>
                 <p className="log">
                     {log}
+
                 </p>
             </Card>
         </Content>

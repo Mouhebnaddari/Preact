@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useRef, useState,useCallback} from 'react'
 import Cron from 'react-js-cron'
 import {Button, Form, Input, notification} from "antd";
 import {Content} from "antd/lib/layout/layout";
@@ -8,17 +8,18 @@ import './App.css';
 import "@fontsource/ubuntu-mono";
 
 
+
 export default function Scheduling() {
     const [job, setJob] = useState("")
     const [remote, setRemote] = useState("")
     const [isLoading, setLoading] = useState(false)
-    const inputRef = React.useRef(null)
+    const inputRef = useRef(null)
     const defaultValue = "* * * * *"
-    const [cronExpression, setCronExpression] = React.useState(defaultValue)
-    const [error, onError] = React.useState()
+    const [cronExpression, setCronExpression] = useState(defaultValue)
+    const [error, onError] = useState()
     const [form] = Form.useForm()
 
-    const customSetCronExpression = React.useCallback(newValue => {
+    const customSetCronExpression = useCallback(newValue => {
         setCronExpression(newValue)
         inputRef.current?.setValue(newValue)
     }, [inputRef])
@@ -28,7 +29,7 @@ export default function Scheduling() {
         setLoading(true);
         try {
             await schedule(job, remote, cronExpression)
-            notification.success({
+                notification.success({
                 message: 'Job scheduled successfully'
             });
             form.resetFields()
@@ -65,7 +66,7 @@ export default function Scheduling() {
                     >
                         <Input/>
                     </Form.Item>
-                    <Form.Item style={{paddingLeft: '20%'}}
+                    <Form.Item style={{paddingLeft: '30%'}}
                                name="cronExpression"
                                rules={[{
                                    required: true,

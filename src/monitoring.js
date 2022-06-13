@@ -2,7 +2,7 @@ import 'antd/dist/antd.min.css'
 import './App.css';
 import {useEffect, useState} from "react";
 import {Table} from 'antd'
-import {getHistory} from "./services/jobService";
+import {getHistory,getUpcoming} from "./services/jobService";
 import {Content} from "antd/lib/layout/layout";
 import moment from "moment";
 import "@fontsource/ubuntu-mono";
@@ -13,13 +13,22 @@ export default function Monitoring() {
 
     useEffect(() => {
         fetchData().catch(console.error)
-    },[])
+    }, [])
+
+    const [inf, setInf] = useState([])
+    const fetchInf = async () => setInf(await getUpcoming())
+    useEffect(() => {
+        fetchInf().catch(console.error)
+    }, [])
 
     return (
 
-                <Content className="site-layout-content">
-                    <Table columns={columns} dataSource={data} />
-                </Content>
+        <Content className="site-layout-content">
+            <Table columns={columns} dataSource={data}/>
+            <Table columns={columnss} dataSource={inf}/>
+        </Content>
+
+
     );
 };
 
@@ -46,4 +55,23 @@ const columns = [
         dataIndex: 'log',
         key: 'log'
     }
+]
+const columnss = [
+    {
+        title: 'Job',
+        dataIndex: 'job',
+        key: 'job'
+    },
+    {
+        title: 'Hostname',
+        dataIndex: 'hostname',
+        key: 'hostname'
+    },
+    {
+        title: 'CronExpression',
+        dataIndex: 'cronExpression',
+        key: 'cronExpression',
+
+    }
+
 ]
