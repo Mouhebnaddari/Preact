@@ -80,7 +80,7 @@ export default function Login() {
                     <Form.Item wrapperCol={{offset: 14, span: 20,}}>
                         <Button
                             type="primary" loading={isLoading} htmlType='submit'>
-                            Submit
+                            Login
                         </Button>
                     </Form.Item>
                 </Form>

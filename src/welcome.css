@@ -1,20 +1,3 @@
 
-body {
-    width: 100%;
-    height: 100%;
-    background-image: url("cover.jpg");
-    z-index: -1;
-    background-repeat: no-repeat;
-    background-size: cover;
-}
-
-a {
-    padding: 10px 20px;
-    margin-top: 50px;
-
-}
-
-
-
 
 

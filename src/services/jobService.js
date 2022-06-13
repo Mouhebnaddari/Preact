@@ -46,10 +46,10 @@ export async function deleteJob(_id) {
     return axios.delete(deleteAPI, body)
         .then(res => res.data)
 }
-export async function orchestrator(job,hostname){
-    const body ={job,hostname}
-    return axios.post(orchestratorAPI,body)
-        .then (res=>res.data)
+
+export async function orchestrator(data) {
+    return axios.post(orchestratorAPI, data)
+        .then(res => res.data)
 }
 
 

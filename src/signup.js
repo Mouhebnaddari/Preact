@@ -7,7 +7,6 @@ import 'antd/dist/antd.min.css'
 import './App.css';
 
 
-
 export default function Signup() {
     const [isLoading, setLoading] = useState(false)
     const [form] = Form.useForm()
@@ -101,7 +100,7 @@ export default function Signup() {
                     <Form.Item  wrapperCol={{offset: 14, span: 20,}}>
                         <Button
                             type="primary" loading={isLoading} htmlType='submit'>
-                            Submit
+                            Signup
                         </Button>
                     </Form.Item>
                 </Form>

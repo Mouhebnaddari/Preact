@@ -1,39 +1,52 @@
-import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Form, Input, Space } from 'antd';
-import React from 'react';
-import {useState} from "react";
+import {MinusCircleOutlined, PlusOutlined} from '@ant-design/icons';
+import {Button, Form, Input, Space} from 'antd';
+import React, {useState} from 'react';
 import {orchestrator} from "./services/jobService";
 import 'antd/dist/antd.min.css'
 import './App.css';
 import "@fontsource/ubuntu-mono";
 
 const Orchestrator = () => {
-    const [job, setJob] = useState("")
-    const [hostname, setHostname] = useState("")
-    const submit =async () => {
-        try{
-            await orchestrator(job,hostname)
+    const [jobs, setJobs] = useState([])
+    const [hostnames, setHostnames] = useState([])
+    const [cron, setCron] = useState("* * * * *")
 
-        }catch (error){
+
+    const submit = async () => {
+        try {
+            const data = {
+                cron,
+                orchestration: []
+            }
+
+            for (let index = 0; index < jobs.length; index++) {
+                data.orchestration.push({order: index, job: jobs[index], hostname: hostnames[index]})
+            }
+
+            await orchestrator(data)
+
+        } catch (error) {
             console.error(error)
         }
     }
-    function handleChange(i, event) {
-        const values = [...job];
+
+    function handleJob(i, event) {
+        const values = [...jobs];
         values[i] = event.target.value;
-        setJob(values);
+        setJobs(values);
     }
-    function handle(i, event) {
-        const values = [...hostname];
+
+    function handleHostname(i, event) {
+        const values = [...hostnames];
         values[i] = event.target.value;
-        setHostname(values);
+        setHostnames(values);
     }
 
 
     return (
         <Form name="dynamic_form_nest_item" onFinish={submit} autoComplete="off">
             <Form.List name="users">
-                {(fields, { add, remove }) => (
+                {(fields, {add, remove}) => (
                     <>
                         {fields.map(({ key, name, ...restField }) => (
                             <Space
@@ -46,17 +59,17 @@ const Orchestrator = () => {
                             >
                                 <Form.Item
                                     {...restField}
-                                    name={[name, 'job']}
+                                    name={[name, 'jobs']}
                                     rules={[
                                         {
                                             required: true,
-                                            message: 'Missing job name',
+                                            message: 'Missing jobs name',
                                         },
                                     ]}
                                 >
                                     <Input placeholder="Job Name"
-                                           value={job || ""}
-                                           onChange={(e) => handleChange(key, e)} />
+                                           value={jobs || ""}
+                                           onChange={(e) => handleJob(key, e)}/>
                                 </Form.Item>
                                 <Form.Item
                                     {...restField}
@@ -69,16 +82,16 @@ const Orchestrator = () => {
                                     ]}
                                 >
                                     <Input placeholder="host Name"
-                                           value={hostname || ""}
-                                           onChange={(e) => handle(key, e)}
+                                           value={hostnames || ""}
+                                           onChange={(e) => handleHostname(key, e)}
                                     />
                                 </Form.Item>
                                 <MinusCircleOutlined onClick={() => remove(name)} />
                             </Space>
                         ))}
                         <Form.Item>
-                            <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
-                                Add field
+                            <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined/>}>
+                                Add Job
                             </Button>
                         </Form.Item>
                     </>

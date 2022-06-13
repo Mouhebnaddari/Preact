@@ -21,7 +21,7 @@
 }
 
 .site-page-footer {
-    position: sticky;
+    position: absolute;
     text-align: center;
     bottom: 0;
     width: 100%;
