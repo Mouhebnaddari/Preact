@@ -1,41 +1,54 @@
-import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Form, Input, Space } from 'antd';
-import React from 'react';
-import {useState} from "react";
+import {MinusCircleOutlined, PlusOutlined} from '@ant-design/icons';
+import {Button, Form, Input, Space} from 'antd';
+import React, {useState} from "react";
 import {orchestrator} from "./services/jobService";
 import 'antd/dist/antd.min.css'
 import './App.css';
 import "@fontsource/ubuntu-mono";
+import Cron from "react-js-cron";
+import {useCallback, useRef} from "react";
 
 const Orchestrator = () => {
-    const [job, setJob] = useState("")
-    const [hostname, setHostname] = useState("")
-    const submit =async () => {
-        try{
-            await orchestrator(job,hostname)
-
-        }catch (error){
+    const [jobs, setJobs] = useState([])
+    const [hostnames, setHostnames] = useState([])
+    const defaultValue = "* * * * *"
+    const [cronExpression, setCronExpression] = useState(defaultValue)
+    const [error, onError] = useState()
+    const inputRef = useRef(null)
+    const customSetCronExpression = useCallback(newValue => {
+        setCronExpression(newValue)
+        inputRef.current?.setValue(newValue)
+    }, [inputRef])
+    const submit = async () => {
+        try {
+            const data = {
+                cronExpression,
+                orchestration: []
+            }
+            for (let index = 0; index < jobs.length; index++) {
+                data.orchestration.push({order: index, job: jobs[index], hostname: hostnames[index]})
+            }
+            await orchestrator(data)
+        } catch (error) {
             console.error(error)
         }
     }
-    function handleChange(i, event) {
-        const values = [...job];
+    function handleJob(i, event) {
+        const values = [...jobs];
         values[i] = event.target.value;
-        setJob(values);
+        setJobs(values);
     }
-    function handle(i, event) {
-        const values = [...hostname];
+    function handleHostname(i, event) {
+        const values = [...hostnames];
         values[i] = event.target.value;
-        setHostname(values);
+        setHostnames(values);
     }
-
-
     return (
         <Form name="dynamic_form_nest_item" onFinish={submit} autoComplete="off">
             <Form.List name="users">
-                {(fields, { add, remove }) => (
+                {(fields, {add, remove}) => (
                     <>
-                        {fields.map(({ key, name, ...restField }) => (
+                        {fields.map(({key, name, ...restField}) => (
                             <Space
                                 key={key}
                                 style={{
@@ -46,39 +59,50 @@ const Orchestrator = () => {
                             >
                                 <Form.Item
                                     {...restField}
-                                    name={[name, 'job']}
+                                    name={[name, 'jobs']}
                                     rules={[
                                         {
                                             required: true,
-                                            message: 'Missing job name',
+                                            message: 'Missing jobs names',
                                         },
                                     ]}
                                 >
                                     <Input placeholder="Job Name"
-                                           value={job || ""}
-                                           onChange={(e) => handleChange(key, e)} />
+                                           value={jobs || ""}
+                                           onChange={(e) => handleJob(key, e)}/>
                                 </Form.Item>
                                 <Form.Item
                                     {...restField}
-                                    name={[name, 'host']}
+                                    name={[name, 'hostname']}
                                     rules={[
                                         {
                                             required: true,
-                                            message: 'Missing host name',
+                                            message: 'Missing hostnames',
                                         },
                                     ]}
                                 >
                                     <Input placeholder="host Name"
-                                           value={hostname || ""}
-                                           onChange={(e) => handle(key, e)}
+                                           value={hostnames || ""}
+                                           onChange={(e) => handleHostname(key, e)}
                                     />
                                 </Form.Item>
-                                <MinusCircleOutlined onClick={() => remove(name)} />
+                                <MinusCircleOutlined onClick={() => remove(name)}/>
                             </Space>
                         ))}
+                        <Form.Item style={{paddingLeft: '30%'}}
+                                   name="cronExpression"
+                                   rules={[{
+                                       required: true,
+                                       message: 'Please select a cron!',
+                                       validator: () => cronExpression === defaultValue ? Promise.reject() : Promise.resolve()
+                                   }]}
+                        >
+                            <Cron value={cronExpression} setValue={customSetCronExpression} onError={onError}/>
+                        </Form.Item>
+
                         <Form.Item>
-                            <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
-                                Add field
+                            <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined/>}>
+                                Add job
                             </Button>
                         </Form.Item>
                     </>
@@ -92,5 +116,4 @@ const Orchestrator = () => {
         </Form>
     );
 };
-
-export default Orchestrator;
+export default Orchestrator

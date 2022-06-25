@@ -4,11 +4,8 @@ import {Button, Form, Input, notification} from "antd";
 import {Content} from "antd/lib/layout/layout";
 import {schedule} from './services/jobService'
 import 'antd/dist/antd.min.css'
-import './App.css';
-import "@fontsource/ubuntu-mono";
-
-
-
+import './App.css'
+import "@fontsource/ubuntu-mono"
 export default function Scheduling() {
     const [job, setJob] = useState("")
     const [remote, setRemote] = useState("")
@@ -23,8 +20,6 @@ export default function Scheduling() {
         setCronExpression(newValue)
         inputRef.current?.setValue(newValue)
     }, [inputRef])
-
-
     const submit = async () => {
         setLoading(true);
         try {
@@ -43,7 +38,6 @@ export default function Scheduling() {
             setLoading(false);
         }
     }
-
     return (
         <div>
             <Content className="site-layout-content">
@@ -76,7 +70,6 @@ export default function Scheduling() {
                     >
                         <Cron value={cronExpression} setValue={customSetCronExpression} onError={onError}/>
                     </Form.Item>
-
                     <Form.Item wrapperCol={{offset: 10, span: 20}}>
                         <Button type="primary" loading={isLoading} htmlType='submit'>
                             Submit
@@ -85,6 +78,5 @@ export default function Scheduling() {
                 </Form>
             </Content>
         </div>
-
     );
 };

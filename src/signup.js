@@ -6,26 +6,22 @@ import "@fontsource/ubuntu-mono";
 import 'antd/dist/antd.min.css'
 import './App.css';
 
-
-
 export default function Signup() {
     const [isLoading, setLoading] = useState(false)
     const [form] = Form.useForm()
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     const [email, setEmail] = useState("")
-
     const submit = async () => {
         setLoading(true);
         try {
-            await sign(username, password,email)
+            await sign(username, password, email)
             notification.success({
                 message: 'Account signed up successfully'
             });
             form.resetFields()
         } catch (e) {
             console.error(e)
-
             notification.error({
                 message: 'Signup Failed',
                 description: e
@@ -34,25 +30,18 @@ export default function Signup() {
             setLoading(false);
         }
     }
-
-
-
     return (
         <div>
             <Content className="site-layout-content">
-                <Form  form={form} onFinish={submit}
-                       style={{paddingRight: '30%'}}
-                    name="basic"
-                    labelCol={{
-                        span: 8,
-                    }}
-                    wrapperCol={{
-                        span: 16,
-                    }}
-
-                    //  onFinish={onFinish}
-                    // onFinishFailed={onFinishFailed}
-                    // autoComplete="off"
+                <Form form={form} onFinish={submit}
+                      style={{paddingRight: '30%'}}
+                      name="basic"
+                      labelCol={{
+                          span: 8,
+                      }}
+                      wrapperCol={{
+                          span: 16,
+                      }}
                 >
                     <Form.Item
                         label="Username"
@@ -68,7 +57,6 @@ export default function Signup() {
                     >
                         <Input/>
                     </Form.Item>
-
                     <Form.Item
                         label="Password"
                         name="password"
@@ -97,11 +85,10 @@ export default function Signup() {
                     >
                         <Input/>
                     </Form.Item>
-
-                    <Form.Item  wrapperCol={{offset: 14, span: 20,}}>
+                    <Form.Item wrapperCol={{offset: 14, span: 20,}}>
                         <Button
                             type="primary" loading={isLoading} htmlType='submit'>
-                            Submit
+                            Signup
                         </Button>
                     </Form.Item>
                 </Form>

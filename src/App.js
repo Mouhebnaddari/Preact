@@ -1,4 +1,4 @@
-import {useState}  from "react";
+import {useState} from "react";
 import React from "react";
 import {Button, Card, Form, Input} from 'antd'
 import {Content} from "antd/lib/layout/layout";
@@ -13,17 +13,14 @@ export default function App() {
     const [isLoading, setLoading] = useState(false)
     const [log, setLog] = useState("")
     const [form] = Form.useForm();
-
     const submit = async () => {
         setLoading(true);
-        const {data} = await call(job, remote)
+        const data = await call(job, remote)
         setLog(data);
         setLoading(false);
-        form.resetFields()
+        // form.resetFields()
     }
-
     return (
-
         <Content className="site-layout-content">
             <Form labelCol={{span: 4}} wrapperCol={{span: 16}} form={form} onFinish={submit}>
                 <Form.Item
@@ -53,7 +50,6 @@ export default function App() {
             <Card title='Output'>
                 <p className="log">
                     {log}
-
                 </p>
             </Card>
         </Content>

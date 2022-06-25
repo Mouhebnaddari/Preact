@@ -8,7 +8,7 @@ import Welcome from "./welcome";
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-      <Router/>
+      <Welcome/>
   </React.StrictMode>
 );
 
