@@ -1,39 +1,53 @@
-import {Button, Form, Input, notification} from 'antd';
-import {sign} from "./services/jobService";
-import React, {useState} from 'react'
+import React, {useEffect, useState} from "react";
+import {Button, Form, Input, notification} from "antd";
 import {Content} from "antd/lib/layout/layout";
 import "@fontsource/ubuntu-mono";
 import 'antd/dist/antd.min.css'
-import './App.css';
+import '../App.css';
+import axios from 'axios';
+import {useNavigate} from "react-router-dom";
+import useToken from "./token";
 
-export default function Signup() {
+const loginAPI = '/login'
+
+export default function Login() {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const [isLoading, setLoading] = useState(false)
     const [form] = Form.useForm()
-    const [username, setUsername] = useState("")
-    const [password, setPassword] = useState("")
-    const [email, setEmail] = useState("")
-    const submit = async () => {
-        setLoading(true);
+    const navigate = useNavigate()
+    const {token, setToken} = useToken();
+
+    useEffect(() => {
+        if (token) {
+            navigate('/monitoring')
+        }
+    }, [])
+
+
+    const auth = async () => {
+        setLoading(true)
         try {
-            await sign(username, password, email)
-            notification.success({
-                message: 'Account signed up successfully'
+            const {data} = await axios.post(loginAPI, {
+                email: email,
+                password: password
             });
-            form.resetFields()
-        } catch (e) {
-            console.error(e)
-            notification.error({
-                message: 'Signup Failed',
-                description: e
-            });
+            setToken(data.token)
+            navigate('/monitoring')
+        } catch (error) {
+            if (error.response) {
+                notification.error({
+                    message: error.response.data.message
+                })
+            }
         } finally {
-            setLoading(false);
+            setLoading(false)
         }
     }
     return (
         <div>
             <Content className="site-layout-content">
-                <Form form={form} onFinish={submit}
+                <Form form={form} onFinish={auth}
                       style={{paddingRight: '30%'}}
                       name="basic"
                       labelCol={{
@@ -43,34 +57,6 @@ export default function Signup() {
                           span: 16,
                       }}
                 >
-                    <Form.Item
-                        label="Username"
-                        name="username"
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Please input your username!',
-                            },
-                        ]}
-                        value={username}
-                        onChange={(e => setUsername(e.target.value))}
-                    >
-                        <Input/>
-                    </Form.Item>
-                    <Form.Item
-                        label="Password"
-                        name="password"
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Please input your password!',
-                            },
-                        ]}
-                        value={password}
-                        onChange={(e => setPassword(e.target.value))}
-                    >
-                        <Input.Password/>
-                    </Form.Item>
                     <Form.Item
                         label="Email"
                         name="Email"
@@ -85,15 +71,30 @@ export default function Signup() {
                     >
                         <Input/>
                     </Form.Item>
+
+                    <Form.Item
+                        label="Password"
+                        name="password"
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please input your password!',
+                            },
+                        ]}
+                        value={password}
+                        onChange={(e => setPassword(e.target.value))}
+                    >
+                        <Input.Password/>
+                    </Form.Item>
+
                     <Form.Item wrapperCol={{offset: 14, span: 20,}}>
                         <Button
                             type="primary" loading={isLoading} htmlType='submit'>
-                            Signup
+                            Login
                         </Button>
                     </Form.Item>
                 </Form>
             </Content>
         </div>
     );
-};
-
+}

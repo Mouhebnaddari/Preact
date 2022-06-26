@@ -1,14 +1,13 @@
 import 'antd/dist/antd.min.css'
-import './App.css';
-import {useEffect, useState} from "react";
-import React from"react"
+import '../App.css';
+import React, {useEffect, useState} from "react";
 import {Table} from 'antd'
-import {getHistory, getUpcoming} from "./services/jobService";
+import {getHistory, getUpcoming} from "../services/jobService";
 import {Content} from "antd/lib/layout/layout";
 import moment from "moment";
 import "@fontsource/ubuntu-mono";
 
-export default function Monitoring () {
+export default function Monitoring() {
     const [data, setData] = useState([])
     const fetchData = async () => setData(await getHistory())
     useEffect(() => {

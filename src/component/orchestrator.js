@@ -1,12 +1,11 @@
 import {MinusCircleOutlined, PlusOutlined} from '@ant-design/icons';
 import {Button, Form, Input, Space} from 'antd';
-import React, {useState} from "react";
-import {orchestrator} from "./services/jobService";
+import React, {useCallback, useRef, useState} from "react";
+import {orchestrator} from "../services/jobService";
 import 'antd/dist/antd.min.css'
-import './App.css';
+import '../App.css';
 import "@fontsource/ubuntu-mono";
 import Cron from "react-js-cron";
-import {useCallback, useRef} from "react";
 
 const Orchestrator = () => {
     const [jobs, setJobs] = useState([])

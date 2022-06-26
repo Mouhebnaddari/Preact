@@ -1,10 +1,9 @@
-import {useEffect, useState} from "react";
-import {deleteJob, getUpcoming} from "./services/jobService";
+import React, {useEffect, useState} from "react";
+import {deleteJob, getUpcoming} from "../services/jobService";
 import {Content} from "antd/lib/layout/layout";
 import {Table} from "antd";
-import React from 'react';
 import "@fontsource/ubuntu-mono";
-import './App.css';
+import '../App.css';
 import 'antd/dist/antd.min.css'
 import {DeleteOutlined} from "@ant-design/icons";
 

@@ -1,11 +1,12 @@
-import React, {useRef, useState,useCallback} from 'react'
+import React, {useCallback, useRef, useState} from 'react'
 import Cron from 'react-js-cron'
 import {Button, Form, Input, notification} from "antd";
 import {Content} from "antd/lib/layout/layout";
-import {schedule} from './services/jobService'
+import {schedule} from '../services/jobService'
 import 'antd/dist/antd.min.css'
-import './App.css'
+import '../App.css'
 import "@fontsource/ubuntu-mono"
+
 export default function Scheduling() {
     const [job, setJob] = useState("")
     const [remote, setRemote] = useState("")
